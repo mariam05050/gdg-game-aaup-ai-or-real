@@ -76,6 +76,7 @@ export async function checkInteractions({ call, evaluate, waitFor }) {
   assert.match(await evaluate("document.querySelector('#availability').textContent"), /could not load/);
   await snapshot('loading-error-laptop');
   await call('Network.setBlockedURLs', { urls: [] });
+  await call('Network.setCacheDisabled', { cacheDisabled: false });
   await mouse('.preparation-retry');
   await waitFor("document.querySelector('#availability').textContent.includes('Images ready')");
   await frames(0);
@@ -193,9 +194,11 @@ export async function checkInteractions({ call, evaluate, waitFor }) {
   await frames(1);
   const saved = await evaluate(`localStorage.getItem(${storageKey})`);
   await call('Page.reload', { ignoreCache: true });
-  await waitFor("document.querySelector('.landing')?.hidden===false && document.querySelector('#availability')?.textContent.includes('Images ready')");
+  // Abandonment is immediate; a fresh image download may still be preparing.
+  await waitFor("document.querySelector('.landing')?.hidden===false && !!document.querySelector('#player-name')");
   await frames(0);
   assert.equal(await evaluate(`localStorage.getItem(${storageKey})`), saved);
   assert.equal(await evaluate("document.querySelector('#player-name').value"), '');
+  assert.equal(await evaluate("document.querySelector('.comparison').hidden"), true);
   console.log('PASS touch navigation, Escape/cancel focus, reduced motion, bounded particles/listeners/clock loops, refresh abandons unfinished round without saving');
 }

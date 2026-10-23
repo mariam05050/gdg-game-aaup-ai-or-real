@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 // Optional browser checks use an installed Chrome/Edge, without extra dependencies.
-export async function openBrowser(port) {
+export async function openBrowser(port, { timeoutMs = 15000 } = {}) {
   const executable = [process.env.BROWSER_PATH,
     'C:/Program Files/Google/Chrome/Application/chrome.exe',
     'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
@@ -55,11 +55,12 @@ export async function openBrowser(port) {
     return result.result.value;
   }
   async function waitFor(expression) {
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < Math.ceil(timeoutMs / 100); i++) {
       if (await evaluate(expression)) return;
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    throw new Error(`Timed out: ${expression}`);
+    const state = await evaluate(`({url:location.href,ready:document.readyState,availability:document.querySelector('#availability')?.textContent})`);
+    throw new Error(`Timed out: ${expression}; page state: ${JSON.stringify(state)}`);
   }
   function close() {
     if (socket.readyState === WebSocket.OPEN) {

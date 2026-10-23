@@ -1,12 +1,13 @@
 # Project progress
 
-## Current status: Milestone 8 deployment in progress (2026-10-23)
+## Current status: Milestone 8 deployed and verified (2026-10-23)
 
 Read the full plan, companion prompts, and progress history. User explicitly
 authorized publishing to the verified public target:
-https://github.com/mariam05050/gdg-game-aaup-ai-or-real . Expected Pages address:
-https://mariam05050.github.io/gdg-game-aaup-ai-or-real/ . This is a target address,
-not yet evidence of successful publication.
+https://github.com/mariam05050/gdg-game-aaup-ai-or-real . GitHub's successful
+deployment reports the actual live website:
+https://mariam05050.github.io/gdg-game-aaup-ai-or-real/ . Hosted verification
+below used this public HTTPS address, not a local preview or predicted URL.
 
 - Git 2.49.0.windows.1 and Git Credential Manager 2.6.1 are installed; GitHub CLI
   is absent. Used the saved credential only in memory, verified authenticated login
@@ -38,9 +39,66 @@ not yet evidence of successful publication.
   storage failures, Retry, mouse/touch/keyboard, layouts, reduced motion, and bounded
   loops/listeners. Hosted mode is checked again after deployment.
 
-Pending: initial commit/push, successful Actions deployment, actual workflow run
-and deployed commit evidence, hosted browser checks, and final documentation.
-Physical-device/assistive-technology checks remain manual as recorded below.
+### Actual publication evidence and final checks
+
+- Committed and pushed 63 reviewed project files to `origin/main`, without force
+  push. Initial deployed commit:
+  [`f8b58aa631fe409cdea2a285fe5d3c9cf187a4b1`](https://github.com/mariam05050/gdg-game-aaup-ai-or-real/commit/f8b58aa631fe409cdea2a285fe5d3c9cf187a4b1).
+- [Actions run #1](https://github.com/mariam05050/gdg-game-aaup-ai-or-real/actions/runs/39988346350)
+  completed with `success`: checkout, Node setup, npm ci, tests, production build,
+  Pages configuration, artifact upload and deploy all succeeded. The GitHub Pages
+  deployment record `7283563533` reports `success` for that SHA and the actual live
+  URL above, at 2026-10-23 16:38:05 UTC.
+- Final `npm.cmd run test:browser` against local production preview: passed,
+  exit 0, including the full fault suite, native mouse/touch/keyboard, responsive
+  layouts, reduced motion, and final refresh abandonment. Both `/` and the logo
+  returned HTTP 200 through a separately started/closed local dev server.
+- Hosted runs passed all 31 image decodes and favicon/JavaScript/CSS path/MIME
+  checks, pointer and keyboard rounds, native mouse/touch rounds, feedback,
+  answer/Next locking, continuous time, fifth-answer freeze, matching results,
+  replay/Home, leaderboard persistence after refresh, ties, safe text names,
+  clear/cancel, and storage-error handling. These used isolated profiles, never
+  the normal browser or event scores.
+- The full hosted fault-injection suite did not finish: repeated forced cold
+  downloads sometimes exceeded the unchanged 15-second image-preparation guard.
+  Diagnostics showed HTTP 200 downloads taking about 20 seconds and the correct
+  loading-error/Retry UI, with Start still disabled. Two retries were insufficient
+  in some stress runs. This is recorded as a remote-network verification limit,
+  not reported as a passing full hosted regression.
+- Browser-harness fixes only: allow longer hosted waits with diagnostic page state,
+  exercise visible Retry without substituting files or bypassing readiness, restore
+  normal caching after the intentional missing-image simulation, and verify refresh
+  abandonment immediately rather than requiring unrelated new image preparation.
+  The final abandonment assertion also verifies that comparison stays hidden.
+- Final `node .tmp/check-hosted-smoke.mjs`: passed, exit 0, against the actual live
+  site with normal caching and no network fault injection. All 30 pictures and logo
+  decoded, five distinct questions produced 5/5, cards locked, feedback matched,
+  time stayed frozen after answer five and through results, saving occurred before
+  View Results, and the saved leaderboard survived a normal refresh. No runtime
+  exceptions occurred. This isolated run never cleared any scores. The temporary
+  check and its browser profile remain ignored; neither is published as source.
+- SHA-256 comparison confirms every `src/` file, all 31 original public assets,
+  both authoritative instruction documents, package.json and package-lock.json
+  are unchanged from the start of Milestone 8. No design or game rule changed.
+- Git index audit found only the intended 63 source/asset/doc/test/config files;
+  no node_modules, dist, .tmp, credentials, or player data is tracked. No local
+  dependencies were reinstalled and no original file was deleted.
+- README now records repository/live links, initial deployed SHA and successful
+  workflow, production/local paths, workflow operation, safe isolated hosted checks,
+  and verification limits. This documentation/browser-harness follow-up triggers a
+  subsequent main deployment; its site source and build configuration are identical
+  to the initial verified deployment. Subsequent runs are listed in the repository's
+  [deployment workflow history](https://github.com/mariam05050/gdg-game-aaup-ai-or-real/actions/workflows/deploy.yml).
+
+No authentication or Pages configuration blocker remains. Review cold image
+loading/Retry on the intended event connection, actual phone/keyboard/scrolling,
+assistive technology, storage/privacy settings, OS reduced-motion preference, and
+real background-tab behavior. Those physical-device checks remain manual; full
+local/browser emulation does not replace them. Preserve real event scores.
+
+Milestone 8 publication is complete. No unrelated features or visual changes were
+introduced. The final reply identifies the follow-up deployment's confirmed SHA
+and workflow after it completes, so the latest deployed revision is unambiguous.
 
 ## Requested visual follow-up complete (2026-10-23)
 

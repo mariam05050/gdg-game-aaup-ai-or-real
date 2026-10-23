@@ -5,12 +5,12 @@ picture pairs, and compare your best score and time on a browser-local leaderboa
 Built with Vite, vanilla JavaScript ES modules, HTML, and CSS. One HTML entry uses
 in-app views, so server-side route rewrites are not needed.
 
-Milestones 1-7 are complete; Milestone 8 deployment is being verified. The supplied
-GDG branding and existing white-grid, Google-color design are preserved.
+Milestones 1-8 are complete and the website is published on GitHub Pages. The supplied GDG branding and existing
+white-grid, Google-color design are preserved.
 
 Repository: [mariam05050/gdg-game-aaup-ai-or-real](https://github.com/mariam05050/gdg-game-aaup-ai-or-real)
 
-Pages target (deployment verification pending):
+Live website:
 [AI OR REAL](https://mariam05050.github.io/gdg-game-aaup-ai-or-real/)
 
 ## Local setup
@@ -51,7 +51,7 @@ and no unpaired picture files. It does not prove image provenance or perform
 full browser decoding. See `docs/progress.md` for checks actually performed.
 
 The build writes to `dist/`; preview serves that build at the printed local URL
-(normally `http://localhost:4173/`). Keep `package-lock.json` in source control
+(normally `http://localhost:4173/gdg-game-aaup-ai-or-real/`). Keep `package-lock.json` in source control
 for reproducible installs. `node_modules/`, `dist/`, and temporary audit outputs
 are ignored. Preview is a local build check, not deployment.
 
@@ -203,8 +203,8 @@ Normal `npm.cmd run preview` serves `/gdg-game-aaup-ai-or-real/` from `dist/`.
 
 ## Source and local-only files
 
-Keep source, `public/` assets, `docs/`, tests, scripts, `index.html`, Vite config,
-package files, and `.gitignore` under version control when a repository is chosen.
+Source, `public/` assets, `docs/`, tests, scripts, `index.html`, Vite config,
+package files, and `.gitignore` are under version control.
 `node_modules/`, `dist/`, `.tmp/`, temporary files, environment secrets, local
 credential files, and optional root `local-data/`, `player-data/`, `score-exports/`,
 and `leaderboard*.json` exports are excluded by `.gitignore`. The application
@@ -229,10 +229,38 @@ their repositories on 2026-10-23, following the
 [Vite deployment guide](https://vite.dev/guide/static-deploy.html) and
 [GitHub Pages workflow requirements](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-Deployment commit, workflow run, and hosted verification results will be recorded
-here and in `docs/progress.md` once GitHub reports a successful deployment.
+Initial verified deployment:
+
+- Commit: [`f8b58aa631fe409cdea2a285fe5d3c9cf187a4b1`](https://github.com/mariam05050/gdg-game-aaup-ai-or-real/commit/f8b58aa631fe409cdea2a285fe5d3c9cf187a4b1).
+- Successful [build/deployment run #1](https://github.com/mariam05050/gdg-game-aaup-ai-or-real/actions/runs/39988346350).
+- GitHub's `github-pages` deployment status reports success and the live URL above.
+- Hosted checks verified every picture/logo, favicon/JS/CSS, five-question pointer,
+  keyboard, mouse and touch games, continuous timing, locking/feedback/results,
+  replay/Home, and leaderboard refresh persistence/rankings/clear/cancel in an
+  isolated browser. Full verification details and any network retries are in
+  `docs/progress.md`.
+
+This documentation and browser-harness follow-up triggers another deployment on
+push; it does not alter the website source, images, or production configuration.
+See [subsequent workflow runs](https://github.com/mariam05050/gdg-game-aaup-ai-or-real/actions/workflows/deploy.yml)
+for the current deployed revision.
 
 The browser suite can also check the hosted game using `TEST_SITE_URL` set to the
 confirmed HTTPS Pages URL. It creates a separate Chrome profile under ignored
 `.tmp/`, requires empty localStorage before using fixtures, and never uses your
 normal browser/event profile. Do not run storage-clearing tests in an event profile.
+
+```powershell
+$env:TEST_SITE_URL='https://mariam05050.github.io/gdg-game-aaup-ai-or-real/'
+npm.cmd run test:browser
+Remove-Item Env:TEST_SITE_URL
+```
+
+Hosted mode allows longer network waits and exercises the visible Retry button
+when slow cold image downloads reach the game's 15-second preparation guard.
+The game never starts before all ten selected pictures decode successfully.
+The normal hosted game/refresh check passed. The full remote fault-injection suite
+did not finish on this connection because repeated cold downloads exceeded that
+guard; the complete fault suite passed against local production preview. Review
+cold loading/Retry on the intended event connection, along with physical-device
+and screen-reader checks. No game code was changed to bypass preparation.

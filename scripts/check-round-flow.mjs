@@ -18,8 +18,20 @@ if (siteUrl) {
 const server = siteUrl ? null : await preview({ base, build: { outDir }, preview: { host: '127.0.0.1', port: 0, strictPort: true } });
 let browser;
 try {
-  browser = await openBrowser(Number(process.env.BROWSER_DEBUG_PORT || 9225));
-  const { call, evaluate, waitFor } = browser;
+  browser = await openBrowser(Number(process.env.BROWSER_DEBUG_PORT || 9225), { timeoutMs: siteUrl ? 60000 : 15000 });
+  const { call, evaluate, waitFor: waitForState } = browser;
+  async function waitFor(expression) {
+    if (!siteUrl || !expression.includes('Images ready')) return waitForState(expression);
+    // A cold hosted download can exceed the game's existing 15-second guard.
+    // Exercise the visible Retry action; never substitute pictures or bypass readiness.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await waitForState(`(${expression}) || !!document.querySelector('.preparation-retry')`);
+      if (await evaluate(expression)) return;
+      if (attempt === 2) throw new Error('Hosted image preparation failed after two visible Retry actions.');
+      console.log('INFO hosted image download reached the loading guard; exercising visible Retry');
+      await evaluate("document.querySelector('.preparation-retry').click()");
+    }
+  }
   await call('Page.enable'); await call('Runtime.enable');
   await call('Emulation.setFocusEmulationEnabled', { enabled: true });
   await call('Page.addScriptToEvaluateOnNewDocument', {
