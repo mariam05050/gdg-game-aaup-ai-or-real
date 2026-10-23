@@ -1,0 +1,31 @@
+node_modules/
+dist/
+*.local
+*.log
+.DS_Store
+Thumbs.db
+.tmp/
+
+# Temporary and local-only files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Credentials and machine-local configuration
+.env
+.env.*
+!.env.example
+/.npmrc
+/.aws/
+/.ssh/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Optional local player data / exports (not used by the app itself)
+/local-data/
+/player-data/
+/score-exports/
+/leaderboard*.json
